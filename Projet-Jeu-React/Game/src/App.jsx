@@ -1,35 +1,42 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+function App() {
+  const [grid] = useState([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+  const [score, setScore] = useState(0);
+
+const TileClick = (rowIndex, colIndex) => {
+  console.log("Case Cliquée :", rowIndex, colIndex);
+  setScore((prev) => prev + 10); // provisoire
+};
+return (
+  <div classname="app">
+    <h1>Mon jeu de grille</h1>
+    <p>Score : {score}</p>
+
+    <div className="grid">
+      {grid.map((row, rowIndex) => (
+        <div key={rowIndex}
+        className='grid-row'>
+          {row.map((cell, colIndex) => (
+            <button
+            key={colIndex}
+            className='tile'
+            onClick={()=> TileClick(rowIndex,colIndex)}
+            >
+              {cell}
+            </button>
+            ))}
+          </div>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
 export default App
