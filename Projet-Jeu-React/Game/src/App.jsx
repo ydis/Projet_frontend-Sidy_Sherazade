@@ -1,35 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [page, setPage] = useState("home"); // minuscule
+  const [playerName, setPlayerName] = useState("");
+
+  function StartGame() {
+    if (playerName.trim() === "") {
+      alert("Entre ton nom !");
+      return;
+    }
+    setPage("game"); // minuscule
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      {page === "home" && (
+        <div className="home">
+          <h1>Mon Super Jeu</h1>
+          <p>Bienvenue ! Entre ton pseudo pour commencer.</p>
+
+          <input
+            type="text"
+            placeholder="Ton pseudo"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
+
+          <button onClick={StartGame}>Jouer</button>
+        </div>
+      )}
+
+      {page === "game" && <GamePage playerName={playerName} />}
+    </div>
+  );
 }
 
-export default App
+function GamePage({ playerName }) {
+  const [grid] = useState([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+  const [score, setScore] = useState(0);
+
+  const TileClick = (rowIndex, colIndex) => {
+    console.log("Case Cliquée :", rowIndex, colIndex);
+    setScore((prev) => prev + 10); // provisoire
+  };
+
+  return (
+    <div className="GamePage">
+      <h1>Mon jeu de grille</h1>
+      <h2>Bienvenue {playerName} !</h2>
+      <p>Score : {score}</p>
+
+      <div className="grid">
+        {grid.map((row, rowIndex) => (
+          <div key={rowIndex} className="grid-row">
+            {row.map((cell, colIndex) => (
+              <button
+                key={colIndex}
+                className="tile"
+                onClick={() => TileClick(rowIndex, colIndex)}
+              >
+                {cell}
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;
+
